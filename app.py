@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
@@ -66,7 +67,7 @@ def get_text_chunks(text):
     return chunks
 
 def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings(openai_api_key='OPENAI_API_KEY_PLACEHOLDER')
+    embeddings = OpenAIEmbeddings(openai_api_key=os.getenv('OPENAI_API_KEY'))
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
@@ -89,7 +90,7 @@ svar kort og konsist.
         ]
     qa_prompt = ChatPromptTemplate.from_messages(messages)
 
-    llm = ChatOpenAI(openai_api_key='OPENAI_API_KEY_PLACEHOLDER', model_name='gpt-3.5-turbo', temperature=0.8)
+    llm = ChatOpenAI(openai_api_key=os.getenv('OPENAI_API_KEY'), model_name='gpt-3.5-turbo', temperature=0.8)
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
     combine_docs_chain_kwargs = {
